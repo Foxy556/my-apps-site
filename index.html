@@ -1,46 +1,648 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Loona's App Studio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loona's App Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header fixo */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 32, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 198, 255, 0.3);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00c6ff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #00c6ff;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: #00c6ff;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        /* Páginas */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: radial-gradient(circle at center, rgba(0, 198, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 198, 255, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 198, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 198, 255, 0.1);
+            border-color: rgba(0, 198, 255, 0.4);
+        }
+
+        /* Seção About */
+        .about-section {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .profile-container {
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 4rem;
+            border: 3px solid rgba(0, 198, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 198, 255, 0.3);
+        }
+
+        .status-badge {
+            background: rgba(0, 255, 127, 0.2);
+            border: 1px solid #00ff7f;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            color: #00ff7f;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .skill-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 198, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 198, 255, 0.3);
+        }
+
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 198, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 198, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 198, 255, 0.2);
+            border-color: rgba(0, 198, 255, 0.4);
+        }
+
+        .app-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .app-card h3 {
+            color: #00c6ff;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Botões */
+        .btn {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 198, 255, 0.3);
+        }
+
+        /* Chat */
+        .chat-container {
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 198, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            border-radius: 4px;
+        }
+
+        .message {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 15px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message.user {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            margin-left: auto;
+            color: white;
+        }
+
+        .message.other {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 198, 255, 0.2);
+        }
+
+        .message-header {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: #00c6ff;
+        }
+
+        .message.user .message-header {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid rgba(0, 198, 255, 0.2);
+            gap: 1rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(0, 198, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-family: 'Orbitron', monospace;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: #00c6ff;
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.2);
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-input button {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(0, 198, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        footer a {
+            color: #00c6ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #0072ff;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(15, 32, 39, 0.98);
+                flex-direction: column;
+                padding: 2rem;
+                border-top: 1px solid rgba(0, 198, 255, 0.3);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .about-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* Animações especiais */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 198, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
+        }
+
+        .status-badge {
+            animation: pulse 2s infinite;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1 data-aos="fade-down">🚀 Welcome to Loona's App Studio</h1>
-    <p data-aos="fade-up" data-aos-delay="200">Your gateway to innovative digital creations.</p>
-  </header>
+    <header>
+        <nav>
+            <a href="#" class="logo">🚀 Loona's Studio</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('about')">Sobre</a></li>
+                <li><a href="#" onclick="showPage('apps')">Apps</a></li>
+                <li><a href="#" onclick="showPage('chat')">Chat</a></li>
+            </ul>
+            <div class="mobile-menu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
 
-  <section class="apps">
-    <div class="app" data-aos="zoom-in">
-      <h2>🌟 FlashTask</h2>
-      <p>A minimalist productivity app to organize your day.</p>
-      <a href="downloads/FlashTask.apk" class="download">Download</a>
-    </div>
+    <main class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="hero" data-aos="fade-up">
+                <h1>🚀 Welcome to Loona's App Studio</h1>
+                <p>Your gateway to innovative digital creations.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn" onclick="showPage('apps')">Explore Apps</a>
+                    <a href="#" class="btn" onclick="showPage('about')">Conheça-me</a>
+                </div>
+            </div>
+            
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <h2>🌟 Destaques do Studio</h2>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h3>📱 Desenvolvimento Mobile</h3>
+                        <p>Criação de apps Android inovadores e funcionais</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🎮 Games & Entretenimento</h3>
+                        <p>Jogos retrô e experiências interativas únicas</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>🔧 Ferramentas Produtivas</h3>
+                        <p>Aplicações que facilitam o dia a dia dos usuários</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <div class="app" data-aos="zoom-in" data-aos-delay="200">
-      <h2>🎮 PixelRealm</h2>
-      <p>Retro-style RPG adventure—small size, big fun.</p>
-      <a href="downloads/PixelRealm.apk" class="download">Download</a>
-    </div>
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="card" data-aos="fade-up">
+                <div class="about-section">
+                    <div class="profile-container">
+                        <div class="profile-img">
+                            🌙
+                        </div>
+                        <div class="status-badge">✨ Desenvolvendo</div>
+                    </div>
+                    <div>
+                        <h2>Sobre Loona</h2>
+                        <p>Olá! Sou Loona, desenvolvedor apaixonado por criar experiências digitais únicas e inovadoras. Meu estúdio de apps nasceu da vontade de transformar ideias criativas em soluções práticas e divertidas.</p>
+                        
+                        <p>Especializo-me em desenvolvimento mobile com foco em apps Android que combinam funcionalidade com design atrativo. Cada projeto é uma oportunidade de explorar novas tecnologias e superar desafios técnicos.</p>
+                        
+                        <p>Quando não estou codando, gosto de explorar jogos retrô, estudar novas tendências em UX/UI e contribuir para a comunidade de desenvolvedores. Minha missão é criar apps que realmente fazem a diferença na vida das pessoas.</p>
+                    </div>
+                </div>
+            </div>
 
-    <div class="app" data-aos="zoom-in" data-aos-delay="400">
-      <h2>📸 SnapLite</h2>
-      <p>Lightweight camera app with instant filters.</p>
-      <a href="downloads/SnapLite.apk" class="download">Download</a>
-    </div>
-  </section>
+            <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <h2>🛠️ Minhas Especialidades</h2>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <h3>Android Development</h3>
+                        <p>Java, Kotlin, Android Studio, Material Design</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Game Development</h3>
+                        <p>Unity, C#, Pixel Art, Game Design</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>UI/UX Design</h3>
+                        <p>Figma, Adobe XD, Prototyping, User Research</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Backend</h3>
+                        <p>Node.js, Firebase, APIs REST, Database</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <footer data-aos="fade-up">
-    <p>Made with ❤️ by Loona · Hosted on <a href="https://github.com/loona-dev">GitHub</a></p>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
-</body>
-</html>
+        <!-- Apps Page -->
+        <div id="apps" class="page">
+            <div class="card" data-aos="fade-up">
+                <h2>📱 Meus Apps</h2>
+                <p>Explore minha coleção de aplicativos desenvolvidos com paixão e dedicação. Cada app representa uma solução única para diferentes necessidades.</p>
+                
+                <div class="apps-grid">
+                    <div class="app-card" data-aos="zoom-in">
+                        <div class="app-icon">🌟</div>
+                        <h3>FlashTask</h3>
+                        <p>A minimalist productivity app to organize your day. Interface limpa e funcionalidades essenciais para máxima produtividade.</p>
+                        <a href="downloads/FlashTask.apk" class="btn">Download APK</a>
+                    </div>
+                    
+                    <div class="app-card" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="app-icon">🎮</div>
+                        <h3>PixelRealm</h3>
+                        <p>Retro-style RPG adventure—small size, big fun. Aventure-se em um mundo pixel art com mecânicas clássicas de RPG.
