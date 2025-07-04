@@ -3,548 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loona's App Studio</title>
+    <title>Loona's File</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Orbitron', monospace;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Header fixo */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 32, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 198, 255, 0.3);
-            z-index: 1000;
-            padding: 1rem 0;
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #00c6ff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a:hover {
-            color: #00c6ff;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .mobile-menu span {
-            width: 25px;
-            height: 3px;
-            background: #00c6ff;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-        /* Container principal */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        main {
-            margin-top: 80px;
-            padding: 2rem 0;
-        }
-
-        /* Páginas */
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 0;
-            background: radial-gradient(circle at center, rgba(0, 198, 255, 0.1) 0%, transparent 70%);
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 30px rgba(0, 198, 255, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 198, 255, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 198, 255, 0.1);
-            border-color: rgba(0, 198, 255, 0.4);
-        }
-
-        /* Seção About */
-        .about-section {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .profile-container {
-            text-align: center;
-        }
-
-        .profile-img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 4rem;
-            border: 3px solid rgba(0, 198, 255, 0.3);
-            box-shadow: 0 0 50px rgba(0, 198, 255, 0.3);
-        }
-
-        .status-badge {
-            background: rgba(0, 255, 127, 0.2);
-            border: 1px solid #00ff7f;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.9rem;
-            color: #00ff7f;
-            display: inline-block;
-            margin-top: 1rem;
-        }
-
-        /* Skills Grid */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .skill-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 198, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .skill-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-        }
-
-        .skill-card:hover {
-            transform: translateY(-3px);
-            border-color: rgba(0, 198, 255, 0.3);
-        }
-
-        /* Apps Grid */
-        .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .app-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 198, 255, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, rgba(0, 198, 255, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .app-card:hover::before {
-            opacity: 1;
-        }
-
-        .app-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 198, 255, 0.2);
-            border-color: rgba(0, 198, 255, 0.4);
-        }
-
-        .app-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .app-card h3 {
-            color: #00c6ff;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        /* Botões */
-        .btn {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            font-family: 'Orbitron', monospace;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 198, 255, 0.3);
-        }
-
-        /* Chat */
-        .chat-container {
-            height: 600px;
-            display: flex;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 198, 255, 0.2);
-            border-radius: 15px;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .chat-header {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .chat-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            border-radius: 4px;
-        }
-
-        .message {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            border-radius: 15px;
-            max-width: 80%;
-            position: relative;
-        }
-
-        .message.user {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            margin-left: auto;
-            color: white;
-        }
-
-        .message.other {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(0, 198, 255, 0.2);
-        }
-
-        .message-header {
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: #00c6ff;
-        }
-
-        .message.user .message-header {
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid rgba(0, 198, 255, 0.2);
-            gap: 1rem;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid rgba(0, 198, 255, 0.3);
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-family: 'Orbitron', monospace;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input input:focus {
-            border-color: #00c6ff;
-            box-shadow: 0 0 20px rgba(0, 198, 255, 0.2);
-        }
-
-        .chat-input input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .chat-input button {
-            background: linear-gradient(45deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-family: 'Orbitron', monospace;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .chat-input button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(0, 198, 255, 0.2);
-            background: rgba(0, 0, 0, 0.2);
-        }
-
-        footer a {
-            color: #00c6ff;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #0072ff;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: rgba(15, 32, 39, 0.98);
-                flex-direction: column;
-                padding: 2rem;
-                border-top: 1px solid rgba(0, 198, 255, 0.3);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu {
-                display: flex;
-            }
-
-            .about-section {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .apps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .message {
-                max-width: 90%;
-            }
-        }
-
-        /* Animações especiais */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 198, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
-        }
-
-        .status-badge {
-            animation: pulse 2s infinite;
-        }
-    </style>
-</head>
+    <link rel="stylesheet" href="style.css"> </head>
 <body>
     <header>
         <nav>
-            <a href="#" class="logo">🚀 Loona's Studio</a>
+            <a href="#" class="logo">✨ Loona</a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showPage('home')">Home</a></li>
-                <li><a href="#" onclick="showPage('about')">Sobre</a></li>
-                <li><a href="#" onclick="showPage('apps')">Apps</a></li>
-                <li><a href="#" onclick="showPage('chat')">Chat</a></li>
-            </ul>
+                <li><a href="#" onclick="showPage('about')">Sobre Mim</a></li>
+                <li><a href="#" onclick="showPage('projects')">Projetos</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contato</a></li> </ul>
             <div class="mobile-menu" onclick="toggleMobileMenu()">
                 <span></span>
                 <span></span>
@@ -554,95 +25,188 @@
     </header>
 
     <main class="container">
-        <!-- Home Page -->
         <div id="home" class="page active">
             <div class="hero" data-aos="fade-up">
-                <h1>🚀 Welcome to Loona's App Studio</h1>
-                <p>Your gateway to innovative digital creations.</p>
+                <h1>Olá, sou o Loona! 🚀</h1>
+                <p>Desenvolvedor apaixonado por criar soluções digitais inovadoras.</p>
                 <div class="hero-buttons">
-                    <a href="#" class="btn" onclick="showPage('apps')">Explore Apps</a>
+                    <a href="#" class="btn" onclick="showPage('projects')">Ver Projetos</a>
                     <a href="#" class="btn" onclick="showPage('about')">Conheça-me</a>
                 </div>
             </div>
-            
+
             <div class="card" data-aos="fade-up" data-aos-delay="200">
-                <h2>🌟 Destaques do Studio</h2>
+                <h2>🌟 Minhas Paixões</h2>
                 <div class="skills-grid">
                     <div class="skill-card">
-                        <h3>📱 Desenvolvimento Mobile</h3>
-                        <p>Criação de apps Android inovadores e funcionais</p>
+                        <h3>💻 Desenvolvimento Web</h3>
+                        <p>Criação de interfaces modernas e responsivas.</p>
                     </div>
                     <div class="skill-card">
-                        <h3>🎮 Games & Entretenimento</h3>
-                        <p>Jogos retrô e experiências interativas únicas</p>
+                        <h3>💻 Desenvolvimento PC/Desktop</h3>
+                        <p>Apps intuitivos e funcionais para Windows 10/11.</p>
                     </div>
                     <div class="skill-card">
-                        <h3>🔧 Ferramentas Produtivas</h3>
-                        <p>Aplicações que facilitam o dia a dia dos usuários</p>
+                        <h3>✨ Design de Experiência</h3>
+                        <p>Foco na usabilidade e na jornada do usuário.</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- About Page -->
         <div id="about" class="page">
             <div class="card" data-aos="fade-up">
                 <div class="about-section">
                     <div class="profile-container">
                         <div class="profile-img">
-                            🌙
-                        </div>
-                        <div class="status-badge">✨ Desenvolvendo</div>
+                            👤 </div>
+                        <div class="status-badge">✨ Disponível para Projetos</div>
                     </div>
                     <div>
-                        <h2>Sobre Loona</h2>
-                        <p>Olá! Sou Loona, desenvolvedor apaixonado por criar experiências digitais únicas e inovadoras. Meu estúdio de apps nasceu da vontade de transformar ideias criativas em soluções práticas e divertidas.</p>
+                        <h2>Sobre Mim</h2>
+                        <p>Olá! Meu nome é Loona, e sou um desenvolvedor com cerca de 3 anos de experiência em aplicativos no Windows. Sou apaixonado por transformar ideias complexas em soluções digitais elegantes e eficientes.</p>
                         
-                        <p>Especializo-me em desenvolvimento mobile com foco em apps Android que combinam funcionalidade com design atrativo. Cada projeto é uma oportunidade de explorar novas tecnologias e superar desafios técnicos.</p>
+                        <p>Minha jornada na programação começou com um curso presencial, e desde então, tenho me dedicado a aprender e aplicar as melhores práticas do mercado. Adoro resolver problemas e criar produtos que realmente impactem a vida das pessoas.</p>
                         
-                        <p>Quando não estou codando, gosto de explorar jogos retrô, estudar novas tendências em UX/UI e contribuir para a comunidade de desenvolvedores. Minha missão é criar apps que realmente fazem a diferença na vida das pessoas.</p>
+                        <p>Além de codar, gosto de jogar videogames, principalmente Grand Theft Auto V e Counter Strike 2. Acredito que a constante aprendizagem e a paixão pelo que faço são os pilares para o sucesso em qualquer projeto.</p>
                     </div>
                 </div>
             </div>
 
             <div class="card" data-aos="fade-up" data-aos-delay="200">
-                <h2>🛠️ Minhas Especialidades</h2>
+                <h2>🛠️ Minhas Habilidades Técnicas</h2>
                 <div class="skills-grid">
                     <div class="skill-card">
-                        <h3>Android Development</h3>
-                        <p>Java, Kotlin, Android Studio, Material Design</p>
-                    </div>
-                    <div class="skill-card">
-                        <h3>Game Development</h3>
-                        <p>Unity, C#, Pixel Art, Game Design</p>
-                    </div>
-                    <div class="skill-card">
-                        <h3>UI/UX Design</h3>
-                        <p>Figma, Adobe XD, Prototyping, User Research</p>
+                        <h3>Frontend</h3>
+                        <p>HTML5, CSS3, JavaScript (ES6+), React, Vue.js, Angular</p>
                     </div>
                     <div class="skill-card">
                         <h3>Backend</h3>
-                        <p>Node.js, Firebase, APIs REST, Database</p>
+                        <p>Node.js, Python (Django/Flask), PHP (Laravel), C# (.NET)</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Banco de Dados</h3>
+                        <p>SQL (PostgreSQL, MySQL), NoSQL (MongoDB, Firebase)</p>
+                    </div>
+                    <div class="skill-card">
+                        <h3>Ferramentas & Outros</h3>
+                        <p>Git, Docker, AWS, Figma, Metodologias Ágeis</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Apps Page -->
-        <div id="apps" class="page">
+        <div id="projects" class="page">
             <div class="card" data-aos="fade-up">
-                <h2>📱 Meus Apps</h2>
-                <p>Explore minha coleção de aplicativos desenvolvidos com paixão e dedicação. Cada app representa uma solução única para diferentes necessidades.</p>
+                <h2>📂 Meus Projetos</h2>
+                <p>Aqui você encontra alguns dos projetos que desenvolvi.</p>
                 
                 <div class="apps-grid">
                     <div class="app-card" data-aos="zoom-in">
-                        <div class="app-icon">🌟</div>
-                        <h3>FlashTask</h3>
-                        <p>A minimalist productivity app to organize your day. Interface limpa e funcionalidades essenciais para máxima produtividade.</p>
-                        <a href="downloads/FlashTask.apk" class="btn">Download APK</a>
+                        <div class="app-icon">💡</div>
+                        <h3>Hide Folder</h3>
+                        <p>Um aplicativo para Windows, focado em esconder uma pasta específica com senha. Construído com Python.</p>
+                        <a href="[link para o projeto ou repositório]" target="_blank" class="btn">Ver Projeto</a>
                     </div>
-                    
-                    <div class="app-card" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="app-icon">🎮</div>
-                        <h3>PixelRealm</h3>
-                        <p>Retro-style RPG adventure—small size, big fun. Aventure-se em um mundo pixel art com mecânicas clássicas de RPG.
+                </div>
+            </div>
+        </div>
+
+        <div id="contact" class="page">
+            <div class="card" data-aos="fade-up">
+                <h2>✉️ Entre em Contato</h2>
+                <p>Gostaria de saber mais sobre meus projetos ou conversar sobre uma oportunidade? Preencha o formulário abaixo ou me encontre nas redes sociais!</p>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h3>Deixe sua Mensagem</h3>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message other">
+                            <div class="message-header">Assistente Virtual:</div>
+                            <p>Olá! Seja bem-vindo(a) ao meu portfólio. Como posso ajudar?</p>
+                        </div>
+                        <div class="message user">
+                            <div class="message-header">Você:</div>
+                            <p>Olá! Quero saber mais sobre o projeto Hide Folder.</p>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+                        <button onclick="sendMessage()">Enviar</button>
+                    </div>
+                </div>
+                <p style="margin-top: 1.5rem; text-align: center;">Ou me encontre em:</p>
+                <div class="hero-buttons">
+                    <a href="rule34.xxx" target="_blank" class="btn">LinkedIn</a>
+                    <a href="xvideos.com" target="_blank" class="btn">GitHub</a>
+                    <a href="mailto:todito556@gmail.com" class="btn">Email</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Loona. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true,
+        });
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            // Fechar o menu mobile se estiver aberto
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            if (navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileMenu.classList.remove('open');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            navLinks.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Funções para o "chat" (pode ser adaptado para um formulário de contato real no futuro)
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const messageText = messageInput.value.trim();
+
+            if (messageText !== '') {
+                const newMessage = document.createElement('div');
+                newMessage.classList.add('message', 'user');
+                newMessage.innerHTML = `<div class="message-header">Você:</div><p>${messageText}</p>`;
+                chatMessages.appendChild(newMessage);
+                messageInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Rolar para a última mensagem
+
+                // Simular uma resposta (você removeria isso para um formulário real)
+                setTimeout(() => {
+                    const responseMessage = document.createElement('div');
+                    responseMessage.classList.add('message', 'other');
+                    responseMessage.innerHTML = `<div class="message-header">Assistente Virtual:</div><p>Agradeço o seu contato! Responderei em breve.</p>`;
+                    chatMessages.appendChild(responseMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        // Mostrar a página inicial ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+        });
+    </script>
+</body>
+</html>
